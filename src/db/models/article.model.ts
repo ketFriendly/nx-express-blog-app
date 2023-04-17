@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Article {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number
 
     @Column("varchar")

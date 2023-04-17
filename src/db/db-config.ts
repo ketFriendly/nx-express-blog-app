@@ -2,7 +2,7 @@ import { DataSource } from "typeorm"
 import { User } from "./models/user.model"
 import { Article } from "./models/article.model"
 
-export const db = new DataSource({
+export const datasource = new DataSource({
     type: "postgres",
     host: "localhost",
     port: 5433,
@@ -12,4 +12,5 @@ export const db = new DataSource({
     entities: [User, Article],
     logging: true,
     synchronize: true,
+    uuidExtension: "uuid-ossp"
 })

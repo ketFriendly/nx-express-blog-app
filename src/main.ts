@@ -1,9 +1,13 @@
 import "reflect-metadata"
-import express from 'express';
-import { db } from "./db/db-config"
+import dotenv from "dotenv";
+import { createExpressServer, useContainer } from "routing-controllers";
+import { Container } from 'typedi';
+import { ArticleController } from './controllers/article.controller';
+import { datasource } from "./db/db-config"
 
-// establish database connection
-db.initialize()
+
+
+const db = datasource.initialize()
   .then(() => {
       console.log("Data Source has been initialized!")
   })
@@ -11,15 +15,19 @@ db.initialize()
       console.error("Error during Data Source initialization:", err)
   })
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3333;
+dotenv.config();
 
-const app = express();
+const port = process.env.SERVER_PORT || 3000;
 
-app.get('/', (req, res) => {
-  res.send({ message: 'Hello API' });
+useContainer(Container);
+
+const app = createExpressServer({
+    controllers: [ArticleController], 
 });
 
-app.listen(port, host, () => {
-  console.log(`[ ready ] http://${host}:${port}`);
-});
+if (!module.require.main) { 
+    app.listen(port);
+}
+
+export default {app, datasource};
+
