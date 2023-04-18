@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 import { createExpressServer, useContainer } from "routing-controllers";
 import { Container } from 'typedi';
 import { ArticleController } from './controllers/article.controller';
+import { UserController } from "./controllers/user.controller";
 import { datasource } from "./db/db-config"
-
 
 
 const db = datasource.initialize()
@@ -22,7 +22,7 @@ const port = process.env.SERVER_PORT || 3000;
 useContainer(Container);
 
 const app = createExpressServer({
-    controllers: [ArticleController], 
+  controllers: [ArticleController, UserController], 
 });
 
 if (!module.require.main) { 
