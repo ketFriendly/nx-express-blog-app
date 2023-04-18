@@ -5,7 +5,7 @@ export class User {
     @PrimaryGeneratedColumn("uuid")
     id: number
 
-    @Column("varchar")
+    @Column("varchar", { unique: true })
     username: string
 
     @Column("varchar")

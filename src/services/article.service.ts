@@ -1,6 +1,5 @@
 import { ArticleDto } from "src/dtos/article.dto";
 import { Service } from "typedi";
-//import { DataSource } from "typeorm";
 import db from "../main"
 import { Article } from "../db/models/article.model";
 
