@@ -1,4 +1,5 @@
-import { JsonController, Post, Body} from "routing-controllers";
+import { JsonController, Post, Body, Res} from "routing-controllers";
+import { Response }  from "express";
 import Container, { Service } from "typedi";
 import { UserService } from "../services/user.service";
 import { UserDto } from "../dtos/user.dto";
@@ -21,4 +22,14 @@ export class UserController {
        }
     }
 
+    @Post('/login')
+    async login (@Body({ required: true, validate: true, type: UserDto }) user: UserDto, @Res() res: Response): Promise<String|undefined>  {
+        try {
+            const jwt =  await this.userService.login(user)
+            res.cookie("jwt",jwt, { maxAge: 36000000, httpOnly: true })
+            return jwt
+        } catch (e) {
+            console.log(e)
+       }
+    }
 }

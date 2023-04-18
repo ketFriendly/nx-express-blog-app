@@ -1,7 +1,10 @@
 import { Service } from "typedi";
+import jwt from "jsonwebtoken";
+import { instanceToPlain } from "class-transformer"
 import db from "../main"
 import { UserDto } from "../dtos/user.dto";
 import { User } from "../db/models/user.model";
+
 
 @Service()
 export class UserService {
@@ -21,4 +24,13 @@ export class UserService {
         }
     }
 
+    async login(userDto: UserDto){
+        const results = await this.db.getRepository(User).findOneBy({
+            username: userDto.username,
+        })
+        if(results && userDto.password === results.password){
+            return jwt.sign(instanceToPlain(userDto), process.env.JWT_SECRET, {expiresIn:"1h"})
+        }
+        return "Failed login attempt"
+    }
 }

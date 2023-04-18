@@ -1,4 +1,4 @@
-import { JsonController, Get, Post, Delete, Body, Param, QueryParam } from "routing-controllers";
+import { JsonController, Get, Post, Delete, Body, Param, QueryParam, Authorized } from "routing-controllers";
 import Container, { Service } from "typedi";
 import { ArticleService } from "../services/article.service";
 import { ArticleDto } from "../dtos/article.dto";
@@ -15,6 +15,7 @@ export class ArticleController {
         this.articleService = Container.get<ArticleService>(ArticleService)
     }
 
+    @Authorized()
     @Post('/create-article')
     async createArticle(@Body({ required: true, validate: true, type: ArticleDto }) article: ArticleDto): Promise<String|undefined>  {
         try {
@@ -25,6 +26,7 @@ export class ArticleController {
         
     }
 
+    @Authorized()
     @Delete('/delete-article/:id')
     async deleteArticle(@Param('id') id: IdDto): Promise<string> {
         try {
