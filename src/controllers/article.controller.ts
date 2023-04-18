@@ -1,8 +1,10 @@
-import { JsonController, Get, Post, Delete, Body, Param } from "routing-controllers";
+import { JsonController, Get, Post, Delete, Body, Param, QueryParam } from "routing-controllers";
 import Container, { Service } from "typedi";
 import { ArticleService } from "../services/article.service";
 import { ArticleDto } from "../dtos/article.dto";
 import { IdDto } from "../dtos/id.dto";
+import { PaginationDto } from "../dtos/pagination.dto";
+
 
 @JsonController('/article')
 @Service()
@@ -27,6 +29,18 @@ export class ArticleController {
     async deleteArticle(@Param('id') id: IdDto): Promise<string> {
         try {
             return await this.articleService.delete(id.id)
+        } catch (e) {
+            console.log(e)
+       }
+    }
+
+    @Get('/published')
+    async getPublished(@QueryParam('pagination', {required:false}) pagination?: PaginationDto): Promise<string> {
+        try {
+            if(!pagination){
+                pagination = new PaginationDto()
+            }
+            return await this.articleService.getPublished(pagination)
         } catch (e) {
             console.log(e)
        }
