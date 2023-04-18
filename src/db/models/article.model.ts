@@ -13,4 +13,7 @@ export class Article {
 
     @Column("date")
     published_at: Date
+
+    @Column("boolean")
+    private: Boolean
 }

@@ -29,13 +29,19 @@ export class ArticleService {
         return results
     }
 
-    async getPublished(paginationDto?: PaginationDto){
+    async getPublished(paginationDto?: PaginationDto, cookie?: string){
+        let auth = false;
+        if(cookie){
+            auth = true
+        }
         const startDate = new Date(Date.now()).toISOString().split('T')[0];
         const entriesToSkip = (paginationDto.page-1) * paginationDto.perPage
         const results = await this.db.getRepository(Article).createQueryBuilder('article').orderBy(paginationDto.sortBy, paginationDto.sortType)
         .take(paginationDto.perPage)
         .skip(entriesToSkip)
-        .where('article.published_at < :startDate', {startDate: startDate}).getMany();
+        .where('article.published_at < :startDate', {startDate: startDate})
+        .andWhere('article.private = :auth', {auth:auth})
+        .getMany();
         return results
     }
 }

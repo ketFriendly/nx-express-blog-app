@@ -9,7 +9,9 @@ export const datasource = new DataSource({
     username: "postgres",
     password: "postgres",
     database: "pg-test",
-    entities: [User, Article],
+    entities: [User, Article], 
+    migrationsTableName: "migration_table", 
+    migrations: ["1681853620963-ArticleRefactor1681853620963"],
     logging: true,
     synchronize: true,
     uuidExtension: "uuid-ossp"

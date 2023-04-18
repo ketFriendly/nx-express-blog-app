@@ -1,9 +1,10 @@
-import { JsonController, Get, Post, Delete, Body, Param, QueryParam, Authorized } from "routing-controllers";
+import { JsonController, Get, Post, Delete, Body, Param, QueryParam, Authorized, Req } from "routing-controllers";
 import Container, { Service } from "typedi";
 import { ArticleService } from "../services/article.service";
 import { ArticleDto } from "../dtos/article.dto";
 import { IdDto } from "../dtos/id.dto";
 import { PaginationDto } from "../dtos/pagination.dto";
+import { Request } from "express";
 
 
 @JsonController('/article')
@@ -37,12 +38,12 @@ export class ArticleController {
     }
 
     @Get('/published')
-    async getPublished(@QueryParam('pagination', {required:false}) pagination?: PaginationDto): Promise<string> {
+    async getPublished(@Req() request: Request, @QueryParam('pagination', {required:false}) pagination?: PaginationDto): Promise<string> {
         try {
             if(!pagination){
                 pagination = new PaginationDto()
             }
-            return await this.articleService.getPublished(pagination)
+            return await this.articleService.getPublished(pagination, request.headers.cookie)
         } catch (e) {
             console.log(e)
        }
